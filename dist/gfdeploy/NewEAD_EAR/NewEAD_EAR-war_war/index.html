@@ -1,0 +1,376 @@
+<%@ page import="viewmodel.Product_view" %>
+<%@ page import="java.util.List" %>
+<%-- 
+    Document   : testAjax
+    Created on : Dec 29, 2017, 7:15:38 PM
+    Author     : quocq
+--%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            // Load the Visualization API and the piechart package.
+            google.load('visualization', '1.0', {
+                'packages': ['corechart']
+            });
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.setOnLoadCallback(reload());
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+//            function drawChart() {
+//
+//                // Create the data table.
+//                //var data = new google.visualization.DataTable();
+//                //data.addColumn('string', 'Topping');
+//                //data.addColumn('number', 'Slices');
+//                /*data.addRows([
+//                 
+//                 ]);*/
+//                var data = google.visualization.arrayToDataTable([
+//                    ['Name', 'Price'],
+//            <c:forEach items="${pieDataList}" var="entry">
+//                    [ '${entry.name}', ${entry.price} ],
+//            </c:forEach>
+//                ]);
+//
+//                // Set chart options
+//                var options = {
+//                    'title': 'Apple products', //title which will be shown right above the Google Pie Chart
+//                    is3D: true, //render Google Pie Chart as 3D
+//                    pieSliceText: 'label', //on mouse hover show label or name of the Country
+//                    tooltip: {showColorCode: true}, // whether to display color code for a Country on mouse hover
+//                    'width': 900, //width of the Google Pie Chart
+//                    'height': 500 //height of the Google Pie Chart
+//                };
+//
+//                // Instantiate and draw our chart, passing in some options.
+//                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+//                chart.draw(data, options);
+//            }
+
+            function reload() {
+                if ($('#chart_div').is(':empty')) {
+                    document.getElementById("chart_div").innerHTML = "";
+                }
+                alert('123');
+                $.ajax({
+                    url: 'SelectServlet',
+                    type: 'GET',
+                    contentType: "application/json",
+                    dataType: 'json',
+
+                    data: {
+
+                        selectedIndex: document.getElementById('manu_id').value
+                    },
+                    success: function (obj) {
+
+
+                        alert(obj.length);
+                        if (obj.length === 0) {
+                            alert('No product found by this manufacturer');
+                            document.getElementById("chart_div").innerHTML = "No product found";
+                        } else
+                        {
+                            var gglData = [];
+                            var colHead = [];
+                            if (obj.length > 0) {
+                                // load column headings
+
+                                Object.keys(obj[0]).forEach(function (key) {
+                                    colHead.push(key);
+                                });
+                                //  gglData.push(colHead);
+
+                                console.log(colHead);
+
+
+                                // load data rows
+                                obj.forEach(function (row) {
+                                    var gglRow = [];
+                                    Object.keys(row).forEach(function (key) {
+                                        gglRow.push(row[key]);
+                                        console.log(gglRow);
+                                    });
+                                    console.log("before " + gglRow);
+                                    gglData.push("[" + gglRow + "]");
+                                    //  gglData.push(gglRow);
+
+                                    console.log("after: " + gglData);
+                                });
+                            }
+                            console.log("head: " + colHead);
+
+                            console.log("data: " + gglData);
+
+                            console.log("data json: " + gglData);
+
+
+                            var data = new google.visualization.DataTable();
+                            data.addColumn('string', 'Name');
+                            data.addColumn('number', 'Price');
+
+                            console.log('test Data: ' + gglData.length);
+
+                            console.log('test Data detail: ' + gglData[0].valueOf());
+
+                            var dataArr = [];
+
+
+                            console.log(dataArr)
+                            for (i = 0; i < gglData.length; i++)
+                            {
+                                dataArr.push(obj[i]["name"]);
+                                dataArr.push(parseFloat(obj[i]["price"]));
+                                //data.addRow(['test', 5]);
+                                data.addRow(dataArr);
+                                dataArr = [];
+                                //   data.addRow(gglData[i]);
+                            }
+
+//                     
+//                        data.addRows([
+//                          ['Iphone 5',200],['safddsf',1230],['Iphone x',3200],['test',123]
+//                        ]);
+
+//                        var data = google.visualization.arrayToDataTable([
+//                            ["Name", "Price"],
+//                            ["aaa", 4],
+//                            ["baa", 5],
+
+//                            gglData,
+//                        ]);
+//                        data.addColumn('string', 'Name');
+//                        data.addColumn('number', 'Price');
+                            // Set chart options
+                            var options = {
+                                'title': document.getElementById("manu_id").value + ' products chart display below', //title which will be shown right above the Google Pie Chart
+                                is3D: true, //render Google Pie Chart as 3D
+                                pieSliceText: 'label', //on mouse hover show label or name of the Country
+                                tooltip: {showColorCode: true}, // whether to display color code for a Country on mouse hover
+                                'width': 900, //width of the Google Pie Chart
+                                'height': 500 //height of the Google Pie Chart
+                            };
+
+                            // Instantiate and draw our chart, passing in some options.
+                            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                            chart.draw(data, options);
+
+                        }
+                    }
+                    ,
+                    error: function (e) {
+                        alert('Error: ' + e);
+                    }
+
+                });
+            }
+            </script>
+
+
+            <title>Index Page</title>
+        </head>
+
+        <body>
+
+            <!--        Search by username: <input type="text" id ="usernameSearch" />
+                    
+                    <input type="button" id="refresh" name="refresh" value="Refresh"/>
+            -->
+            Search by name: <input type="text" id ="fullnameSearch" />
+
+            <input type="button" id="SearchFullname" name="SearchFullname" value="Search Name"/>
+
+            <br/>
+            (Leave blank to show all products)
+            <br/>
+            <br/>
+
+            Price from: 
+            <input type="number" id="txtFrom" name="txtFrom"/>
+
+            Price to:
+            <input type="number" id="txtTo" name="txtTo"/>
+
+            <input type="button" id="priceSearch" name="priceSearch" value="Search" />
+
+            <br/>
+            <br/>
+
+            <a href="CreateProductServlet">Create New </a>
+
+
+            <table border="1" cellspacing="0" cellpadding="5" id='tblData'>
+                <caption><h1>List of Products</h1></caption>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Name</td>
+                        <td>Image</td>
+                        <td>Price</td>
+                        <td>Detail</td>
+                        <td>Manufacturer</td>
+
+                    </tr>
+                </thead>
+                <tbody id="tblBody">
+
+
+                <c:forEach items="${list}" var="e">
+                    <tr>
+                        <td>${e.product_id}</td>
+                        <td>${e.product_name}</td>
+
+                        <td><img src="uploads/${e.product_image}" alt="${e.product_image}" height="80px"></td>
+
+                        <td>${e.product_price}</td>
+                        <td>${e.product_detail}</td>
+                        <td>${e.manu_name}</td>
+                        <td><a href="UpdateProductServlet?product_id=${e.product_id}">Update</a> <a href="DeleteProductServlet?product_id=${e.product_id}"
+                                                                                                    onclick="return confirm('are you sure delete this product ?');">Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </tbody>
+        </table>
+
+        <h3>* Manufacturer with highest total product's price</h3>
+
+        <select name="manu_id" id="manu_id" onchange="reload();">
+            <c:forEach var="item" items="${manu}">
+                <option value="${item.manufacturer_name}"  ${item.manufacturer_name ==  'NCCA' ? 'selected="selected"' : ''} >${item.manufacturer_name}</option>
+            </c:forEach>
+        </select>
+        <div style="width: 600px;">
+            <div id="chart_div"></div>
+        </div>
+        <script>
+
+            var ajaxResult = [];
+
+
+
+
+            $('#SearchFullname').on('click', function () {
+
+                $("#tblBody").empty();
+                $.ajax({
+                    url: 'NameSearchServlet',
+                    type: 'GET',
+                    contentType: "application/json",
+                    dataType: 'json',
+
+                    data: {
+
+                        productName: document.getElementById('fullnameSearch').value
+
+                    },
+                    success: function (obj) {
+
+//                        if (obj === null){  
+//                        {
+//                            alert('not found any matches');
+//                        }
+                        var ajaxResult = [];
+
+                        ajaxResult.push(obj);
+                        $("#tblBody").empty();
+                        //alert("obj: " + obj[0]["password"])
+
+                        // alert("num: "+Object.keys(obj).length);
+                        for (var i = 0; i < obj.length; i++)
+                        {
+
+                            var tr = "<tr>";
+                            var td1 = "<td>" + obj[i]["product_id"] + "</td>";
+                            var td2 = "<td>" + obj[i]["product_name"] + "</td>";
+                            var td3 = "<td><img src='uploads/" + obj[i]["product_image"] + "' height='80px'/></td>";
+                            var td4 = "<td>" + obj[i]["product_price"] + "</td>";
+                            var td5 = "<td>" + obj[i]["product_detail"] + "</td>";
+                            var td6 = "<td>" + obj[i]["manu_name"] + "</td>";
+
+                            var td7 = "<td> <a href='UpdateProductServlet?product_id=" + obj[i]["product_id"] + "'>Update </a> | <a href='DeleteProductServlet?product_id=" + obj[i]["product_id"] + "'>Delete </a></td></tr>";
+
+                            $("#tblData").append(tr + td1 + td2 + td3 + td4 + td5 + td6 + td7);
+                        }
+                    }
+                    ,
+                    error: function (e) {
+                        alert('Error: ' + e);
+                    }
+                });
+            });
+
+
+            $('#priceSearch').on('click', function () {
+
+                $("#tblBody").empty();
+                $.ajax({
+                    url: 'PriceSearchServlet',
+                    type: 'GET',
+                    contentType: "application/json",
+                    dataType: 'json',
+
+                    data: {
+
+                        priceFrom: document.getElementById('txtFrom').value,
+                        priceTo: document.getElementById('txtTo').value
+                    },
+                    success: function (obj) {
+
+                        ajaxResult.push(obj);
+                        // alert('ok' + obj);
+                        $("#tblBody").empty();
+                        //alert("obj: " + obj[0]["password"])
+//                        if (obj === null)
+//                        {
+//                            alert('not found any matches');
+//                        }
+                        // alert("num: "+Object.keys(obj).length);
+                        for (var i = 0; i < obj.length; i++)
+                        {
+
+                            var tr = "<tr>";
+                            var td1 = "<td>" + obj[i]["product_id"] + "</td>";
+                            var td2 = "<td>" + obj[i]["product_name"] + "</td>";
+                            var td3 = "<td><img src='uploads/" + obj[i]["product_image"] + "' height='80px'/></td>";
+                            var td4 = "<td>" + obj[i]["product_price"] + "</td>";
+                            var td5 = "<td>" + obj[i]["product_detail"] + "</td>";
+                            var td6 = "<td>" + obj[i]["manu_name"] + "</td>";
+
+                            var td7 = "<td> <a href='UpdateProductServlet?product_id=" + obj[i]["product_id"] + "'>Update </a> | <a href='DeleteProductServlet?product_id=" + obj[i]["product_id"] + "'>Delete </a></td></tr>";
+
+                            $("#tblData").append(tr + td1 + td2 + td3 + td4 + td5 + td6 + td7);
+                        }
+                    }
+                    ,
+                    error: function (e) {
+                        alert('Error: ' + e);
+                    }
+                });
+            });
+
+//            function warningaa() {
+//                var selectedValue = document.getElementById('manu_id').value;
+//                alert(selectedValue);
+//
+//            }
+
+        </script>
+    </body>
+</html>
+
