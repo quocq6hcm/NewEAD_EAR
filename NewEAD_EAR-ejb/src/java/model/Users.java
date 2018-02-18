@@ -155,5 +155,9 @@ public class Users implements Serializable {
     public String toString() {
         return "model.Users[ username=" + username + " ]";
     }
+
+    public void setLevel(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

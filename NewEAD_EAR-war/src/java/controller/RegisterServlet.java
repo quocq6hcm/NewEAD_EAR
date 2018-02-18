@@ -13,17 +13,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sb.ProductsFacadeLocal;
+import model.Users;
 
 /**
  *
  * @author quocq
  */
-@WebServlet(name = "ProductSelectServlet", urlPatterns = {"/ProductSelectServlet"})
-public class ProductSelectServlet extends HttpServlet {
-
-    @EJB
-    private ProductsFacadeLocal productsFacade;
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
+public class RegisterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,7 +31,6 @@ public class ProductSelectServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -43,10 +39,10 @@ public class ProductSelectServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductSelectServlet</title>");            
+            out.println("<title>Servlet RegisterServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductSelectServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet RegisterServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,15 +57,13 @@ public class ProductSelectServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    @EJB
+    private sb.UsersFacadeLocal uFacade;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        request.setAttribute("list", productsFacade.findAll());
-           
-        System.out.println("aaaaaaaaaaaaaaa"+productsFacade.findAll().get(3).getProductName());
-       
-        request.getRequestDispatcher("views/index.jsp").forward(request, response);
+        request.getRequestDispatcher("views/register.jsp").forward(request, response);
         
     }
 
@@ -84,7 +78,16 @@ public class ProductSelectServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+            
+        Users u = new Users();
+        u.setUsername(request.getParameter("username"));
+        u.setPassword(request.getParameter("password"));
+        u.setPhoto(request.getParameter("photo"));
+        u.setFullname(request.getParameter("fullname"));
+        u.setEmail(request.getParameter("email"));
+        u.setLevel((short)1);
+        uFacade.create(u);
+        response.sendRedirect("LoginServlet");
     }
 
     /**

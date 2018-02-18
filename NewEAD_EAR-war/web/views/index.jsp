@@ -54,6 +54,7 @@
                     execSearch();
                 }
             }
+     
         </script>
         <table border="1" cellspacing="0" cellpadding="5" id='tblData'>
             <caption><h1>List of Products</h1></caption>
@@ -114,6 +115,7 @@
                     success: function (obj) {
                         
                       //  alert(obj.length);
+                        console.log(obj);
                         var ajaxResult = [];
                        // alert(Pagination.page);
                         ajaxResult.push(obj);
@@ -123,6 +125,7 @@
                         for (var i = temp*4; offset < 4 ; offset++)
                         {
                             //alert(offset);
+                            console.log('aaaaaa' +obj[i+offset]["productId"]);
                             var tr = "<tr>";
                             var td1 = "<td>" + obj[i+offset]["productId"] + "</td>";
                             var td2 = "<td>" + obj[i+offset]["productName"] + "</td>";
@@ -131,12 +134,17 @@
                             var td5 = "<td>" + obj[i+offset]["productDetail"] + "</td>";
                             var td6 = "<td>" + obj[i+offset]["manufacturerName"] + "</td>";
 
-                            var td7 = "<td> <a href='DetailProductServlet?productId=" + obj[i+offset]["productId"] + "'>Detail </a> </td></tr>";
+                            var td7 = "<td> <a href='DetailProductServlet?productId=" + obj[i+offset]["productId"] + "'>Detail </a> | <a href='#'>Add to cart</a> </td></tr>";
 
                             $("#tblData").append(tr + td1 + td2 + td3 + td4 + td5 + td6 + td7);
+                            console.log(i+offset+temp);
+                            console.log(obj.length);
+                            
+                            if(i+offset+temp > obj.length-1)
+                                break;
                         }
-                       
-                       
+                       document.getElementById("pagination").innerHTML = "";
+                       init;
                     }
                     ,
                     error: function (e) {
