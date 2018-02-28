@@ -13,15 +13,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Users;
-import sun.font.EAttribute;
+import sb.ManufacturersFacadeLocal;
 
 /**
  *
  * @author quocq
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "DeleteManufacturerServlet", urlPatterns = {"/DeleteManufacturerServlet"})
+public class DeleteManufacturerServlet extends HttpServlet {
+
+    String id;
+    @EJB
+    private ManufacturersFacadeLocal mFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,6 +35,8 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -40,10 +45,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet DeleteManufacturerServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteManufacturerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,13 +63,15 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @EJB
-    private sb.UsersFacadeLocal uFacade;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("views/login.jsp").forward(request, response);
+        id = request.getParameter("manufacturerId");
+        model.Manufacturers temp = mFacade.find(Integer.parseInt(id));
+        
+        System.out.println(temp.toString());
+        
+        
     }
 
     /**
@@ -78,42 +85,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user = request.getParameter("username");
-        String pass = request.getParameter("password");
-        System.out.println(user + "aa" + pass);
-        Users temp = uFacade.find(user);
-
-        if(temp != null)
-        {
-            if(temp.getPassword().equals(pass))
-            {
-                request.getSession().setAttribute("errorLogin", "");
-                
-                if(temp.getLevel() == 1)
-                {
-                    request.getSession(true).setAttribute("user", temp);
-                
-                    response.sendRedirect("SelectProductServlet");
-                }
-                else if (temp.getLevel() == 2)
-                {
-                    request.getSession(true).setAttribute("user", temp);
-                    response.sendRedirect("AdminServlet");
-                }
-            }
-            else
-            {
-                request.getSession().setAttribute("errorLogin", "Wrong ID or password !");
-                response.sendRedirect("LoginServlet");
-                    
-            }
-        }
-        else
-        {
-            request.getSession().setAttribute("errorLogin", "Wrong ID or password !");
-            response.sendRedirect("LoginServlet");
-        }        
-
+        processRequest(request, response);
     }
 
     /**

@@ -7,21 +7,18 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Users;
-import sun.font.EAttribute;
 
 /**
  *
  * @author quocq
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "CartItemServlet", urlPatterns = {"/CartItemServlet"})
+public class CartItemServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +37,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet CartItemServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CartItemServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,13 +55,10 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @EJB
-    private sb.UsersFacadeLocal uFacade;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("views/login.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -78,42 +72,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user = request.getParameter("username");
-        String pass = request.getParameter("password");
-        System.out.println(user + "aa" + pass);
-        Users temp = uFacade.find(user);
-
-        if(temp != null)
-        {
-            if(temp.getPassword().equals(pass))
-            {
-                request.getSession().setAttribute("errorLogin", "");
-                
-                if(temp.getLevel() == 1)
-                {
-                    request.getSession(true).setAttribute("user", temp);
-                
-                    response.sendRedirect("SelectProductServlet");
-                }
-                else if (temp.getLevel() == 2)
-                {
-                    request.getSession(true).setAttribute("user", temp);
-                    response.sendRedirect("AdminServlet");
-                }
-            }
-            else
-            {
-                request.getSession().setAttribute("errorLogin", "Wrong ID or password !");
-                response.sendRedirect("LoginServlet");
-                    
-            }
-        }
-        else
-        {
-            request.getSession().setAttribute("errorLogin", "Wrong ID or password !");
-            response.sendRedirect("LoginServlet");
-        }        
-
+        processRequest(request, response);
     }
 
     /**

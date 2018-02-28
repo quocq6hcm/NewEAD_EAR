@@ -7,30 +7,20 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Products;
+import view_model.CartItem;
 
 /**
  *
  * @author quocq
  */
-@WebServlet(name = "DetailProductServlet", urlPatterns = {"/DetailProductServlet"})
-public class DetailProductServlet extends HttpServlet {
+@WebServlet(name = "AddToCartServlet", urlPatterns = {"/AddToCartServlet"})
+public class AddToCartServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -39,42 +29,25 @@ public class DetailProductServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DetailProductServlet</title>");            
+            out.println("<title>Servlet AddToCartServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DetailProductServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddToCartServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @EJB
-    private sb.ProductsFacadeLocal pFacade;
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pId = request.getParameter("productId");
-        Products p = pFacade.find(pId);
-    
-        request.setAttribute("productId", p.getProductId());
-        request.setAttribute("productName", p.getProductName());
-        request.setAttribute("productPrice", p.getProductPrice());
-        request.setAttribute("productDetail", p.getProductDetail());
-        request.setAttribute("productImage", p.getProductImage());
-        request.setAttribute("manufacturerName", p.getManufacturerId().getManufacturerName());
         
-        request.getSession().setAttribute("cart", p);
-        request.getRequestDispatcher("views/detail.jsp").forward(request, response);
+        view_model.CartItem temp = new CartItem();
+        
+        
+        
+        request.getRequestDispatcher("SelectProductServlet").forward(request, response);
         
     }
 
@@ -89,7 +62,7 @@ public class DetailProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**

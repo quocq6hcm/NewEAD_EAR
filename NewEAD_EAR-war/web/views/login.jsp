@@ -4,6 +4,7 @@
     Author     : quocq
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,8 +21,11 @@
             <br/>
             
             <input type="submit" value="Login"/>
-            <input type ="submit" value="Register" onclick="this.form.action='RegisterServlet';"/>
+            
         </form>
-        
+        <p>Don't have account yet? click to <a href='RegisterServlet'> register </a>!
+            <br/>
+
+            ${errorLogin}
     </body>
 </html>

@@ -12,13 +12,29 @@
 <html>
     <head>
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" integrity="sha384-feJI7QwhOS+hwpX2zkaeJQjeiwlhOP+SdQDqhgvvo1DsjtiSQByFdThsxO669S2D" crossorigin="anonymous"></script>
+
+        
+        <link rel="stylesheet" type="text/css" href="css/datatable-bootstrap.min.css" media="screen">
+
+        <!-- JS files -->
+        <script type="text/javascript" src="js/datatable.min.js"></script>
+
+        <!-- Add the following if you want to use the jQuery wrapper (you still need datatable.min.js): -->
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/datatable.jquery.min.js"></script>
+        <script src="js/jquery.mycart.js" type="text/javascript"></script>
+        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="js/pagination.js" type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="css/pagination.css">
+<!--        <script src="js/pagination.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="css/pagination.css">-->
         <title>Index</title>
     </head>
     <body>
-        <h1>Hello</h1>
+        <h1>Hello</h1> 
+        <span class="glyphicon glyphicon-shopping-cart my-cart-icon"><span class="badge badge-notify my-cart-badge">123</span></span>
         <!--        <a href="CreateProductServlet">Create new</a>-->
         <form id="formSearch">
         Input: <input type="text" name="txtSearch" id="txtSearch"/> 
@@ -93,7 +109,7 @@
         </table>
         
          
-                <div id="pagination"></div>
+                <!--<div id="pagination"></div>-->
         <script>
             function execSearch(offset) {
 
@@ -143,8 +159,7 @@
                             if(i+offset+temp > obj.length-1)
                                 break;
                         }
-                       document.getElementById("pagination").innerHTML = "";
-                       init;
+                       
                     }
                     ,
                     error: function (e) {
@@ -153,5 +168,10 @@
                 });
             };
         </script>
+        <br/>
+        <br/>
+        <br/>
+        
+        <a href="#">Check my cart</a>
     </body>
 </html>

@@ -79,7 +79,7 @@ public class SelectProductServlet extends HttpServlet {
             throws ServletException, IOException {
         
 //        request.setAttribute("list", testFacade.findAll()) ;
-//        request.setAttribute("list", productsFacade.findAll());
+        
 //        int i = productsFacade.findAll().size()/NUM;
 //        for(int j = 1; j <= i; j++)
 //        {
@@ -90,9 +90,10 @@ public class SelectProductServlet extends HttpServlet {
         
 //        request.setAttribute("list", productsFacade.findRange(new int[]{0,9}));
 
-        request.setAttribute("list", productsFacade.findRange(new int[]{0,3}));
-        
-        request.getRequestDispatcher("views/index.jsp").forward(request, response);
+ //       request.setAttribute("list", productsFacade.findRange(new int[]{0,3}));
+        request.setAttribute("list", productsFacade.findAll());
+//        request.getRequestDispatcher("views/index.jsp").forward(request, response);
+        request.getRequestDispatcher("views/newIndex.jsp").forward(request, response);
         
     }
 

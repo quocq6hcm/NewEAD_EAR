@@ -71,7 +71,12 @@ public class DeleteProductServlet extends HttpServlet {
         productsFacade.remove(productsFacade.find(id));
         
         request.setAttribute("list", productsFacade.findAll());
-        request.getRequestDispatcher("views/index.jsp").forward(request, response);
+        
+        System.out.println(request.getHeader("referer"));
+        
+        response.sendRedirect(request.getHeader("referer"));
+       
+        
     }
 
     /**
